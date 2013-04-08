@@ -586,7 +586,7 @@ def pl_resolution(KB, alpha):
         if new.issubset(set(clauses)): return False
 
         print 'new:', len(new)
-        
+
         for c in new:
             if c not in clauses: clauses.append(c)
 
@@ -678,7 +678,7 @@ def dpll_satisfiable(s):
 
     print '  >>> Got clauses (',len(clauses),') and symbols (', len(symbols), ')'
     print '  >>> starting dpll proper'
-    
+
     return dpll(clauses, symbols, {})
 
 def dpll(clauses, symbols, model):
@@ -726,7 +726,7 @@ def find_unit_clause(clauses, model):
         true_literal_in_clause = False # CTM
         for literal in disjuncts(clause):
             sym = literal_symbol(literal)
-            
+
             # CTM: Ensure all already assigned variables lead to literals that are false!
             # (If the literals are true, then the remaining vars could lead to
             # true or false literals)
@@ -734,7 +734,7 @@ def find_unit_clause(clauses, model):
                 val = model[sym]
                 if (not val and literal.op == '~') or (val and literal.op != '~'):
                     true_literal_in_clause = True
-                    
+
             else:
                 num_not_in_model += 1
                 P, value = sym, (literal.op != '~')
@@ -1149,7 +1149,7 @@ def is_literal(thing):
     return isinstance(thing,Expr) and \
            ((thing.op == '~' and len(things.args) == 1) \
             or (len(thing.args) == 0))
-    
+
 def is_literal_positive(literal):
     return not literal.op == '~'
 

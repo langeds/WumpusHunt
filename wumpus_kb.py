@@ -155,7 +155,15 @@ def axiom_generator_percept_sentence(t, tvec):
     axiom_str = ''
     "*** YOUR CODE HERE ***"
     # Comment or delete the next line once this function has been implemented.
-    utils.print_not_implemented()
+    # utils.print_not_implemented()
+    percepts = ['stench', 'breeze', 'glitter', 'bump', 'scream']
+    for i in range(len(tvec)):
+        if tvec[i]:
+            axiom_str += percepts[i] + str(t)
+        else:
+            axiom_str += '~' + percepts[i] + str(t)
+        axiom_str += ' & '
+
     return axiom_str
 
 
@@ -172,7 +180,8 @@ def axiom_generator_initial_location_assertions(x, y):
     axiom_str = ''
     "*** YOUR CODE HERE ***"
     # Comment or delete the next line once this function has been implemented.
-    utils.print_not_implemented()
+    # utils.print_not_implemented()
+    axiom_str += '~' + pit_str(x,y) + ' & ~' + wumpus_str(x,y)
     return axiom_str
 
 def axiom_generator_pits_and_breezes(x, y, xmin, xmax, ymin, ymax):
@@ -187,6 +196,14 @@ def axiom_generator_pits_and_breezes(x, y, xmin, xmax, ymin, ymax):
     """
     axiom_str = ''
     "*** YOUR CODE HERE ***"
+    axiom_str += breeze_str(x,y) + ' >> ('
+    for xtemp in range(x -1, x +1):
+        for ytemp in range(y -1, y +1):
+            if xtemp >= xmin and xtemp <= xmax and ytemp >= ymin and ytemp <= ymax:
+                axiom_str += pit_str(xtemp, ytemp)
+                if xtemp != x+1 or ytemp != y+1:
+                    axiom_str += ' | '
+    axiom_str += ')'
     return axiom_str
 
 def generate_pit_and_breeze_axioms(xmin, xmax, ymin, ymax):
@@ -292,7 +309,7 @@ def axiom_generator_have_arrow_and_wumpus_alive(t = 0):
 def initial_wumpus_axioms(xi, yi, width, height, heading='east'):
     """
     Generate all of the initial wumpus axioms
-    
+
     xi,yi = initial location
     width,height = dimensions of world
     heading = str representation of the initial agent heading
@@ -300,7 +317,7 @@ def initial_wumpus_axioms(xi, yi, width, height, heading='east'):
     axioms = [axiom_generator_initial_location_assertions(xi, yi)]
     axioms.extend(generate_pit_and_breeze_axioms(1, width, 1, height))
     axioms.extend(generate_wumpus_and_stench_axioms(1, width, 1, height))
-    
+
     axioms.append(axiom_generator_at_least_one_wumpus(1, width, 1, height))
     axioms.append(axiom_generator_at_most_one_wumpus(1, width, 1, height))
 
@@ -308,7 +325,7 @@ def initial_wumpus_axioms(xi, yi, width, height, heading='east'):
     axioms.append(axiom_generator_only_one_heading(heading))
 
     axioms.append(axiom_generator_have_arrow_and_wumpus_alive())
-    
+
     return axioms
 
 
@@ -403,7 +420,7 @@ def axiom_generator_at_location_ssa(t, x, y, xmin, xmax, ymin, ymax):
     See Section 7. of AIMA.  However...
     NOTE: the book's version of this class of axioms is not complete
           for the version in Project 3.
-    
+
     x,y := location
     t := time
     xmin, xmax, ymin, ymax := the bounds of the environment.
@@ -607,7 +624,7 @@ def generate_heading_only_one_direction_axioms(t):
 def axiom_generator_only_one_action_axioms(t):
     """
     Assert that only one axion can be executed at a time.
-    
+
     t := time
     """
     axiom_str = ''
@@ -622,7 +639,7 @@ def generate_mutually_exclusive_axioms(t):
     Generate all time-based mutually exclusive axioms.
     """
     axioms = []
-    
+
     # must be t+1 to constrain which direction could be heading _next_
     axioms.extend(generate_heading_only_one_direction_axioms(t + 1))
 
