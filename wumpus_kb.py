@@ -197,12 +197,13 @@ def axiom_generator_pits_and_breezes(x, y, xmin, xmax, ymin, ymax):
     axiom_str = ''
     "*** YOUR CODE HERE ***"
     axiom_str += breeze_str(x,y) + ' >> ('
-    for xtemp in range(x -1, x +1):
-        for ytemp in range(y -1, y +1):
+    pitts = []
+    for xtemp in range(x -1, x +2):
+        for ytemp in range(y -1, y +2):
             if xtemp >= xmin and xtemp <= xmax and ytemp >= ymin and ytemp <= ymax:
-                axiom_str += pit_str(xtemp, ytemp)
-                if xtemp != x+1 or ytemp != y+1:
-                    axiom_str += ' | '
+                pitts.append(pit_str(xtemp, ytemp))
+
+    axiom_str += ' | '.join(pitts)
     axiom_str += ')'
     return axiom_str
 
@@ -230,6 +231,16 @@ def axiom_generator_wumpus_and_stench(x, y, xmin, xmax, ymin, ymax):
     """
     axiom_str = ''
     "*** YOUR CODE HERE ***"
+    axiom_str += stench_str(x,y) + ' >> ('
+    wumpuses = []
+    for xtemp in range(x -1, x +2):
+        for ytemp in range(y -1, y +2):
+            if xtemp >= xmin and xtemp <= xmax and ytemp >= ymin and ytemp <= ymax:
+                wumpuses.append(wumpus_str(xtemp, ytemp))
+
+    axiom_str += ' | '.join(wumpuses)
+    axiom_str += ')'
+
     return axiom_str
 
 def generate_wumpus_and_stench_axioms(xmin, xmax, ymin, ymax):
@@ -248,9 +259,14 @@ def axiom_generator_at_least_one_wumpus(xmin, xmax, ymin, ymax):
     xmin, xmax, ymin, ymax := the bounds of the environment.
     """
     axiom_str = ''
+    wumps = []
     "*** YOUR CODE HERE ***"
+    for x in range(xmin, xmax+1):
+        for y in range(ymin, ymax+1):
+            wumps.append(wumpus_str(x,y))
+    axiom_str += ' | '.join(wumps)
     # Comment or delete the next line once this function has been implemented.
-    utils.print_not_implemented()
+    # utils.print_not_implemented()
     return axiom_str
 
 def axiom_generator_at_most_one_wumpus(xmin, xmax, ymin, ymax):
@@ -262,7 +278,20 @@ def axiom_generator_at_most_one_wumpus(xmin, xmax, ymin, ymax):
     axiom_str = ''
     "*** YOUR CODE HERE ***"
     # Comment or delete the next line once this function has been implemented.
-    utils.print_not_implemented()
+    # utils.print_not_implemented()
+    options = []
+    for x in range(xmin, xmax+1):
+        for y in range(ymin, ymax+1):
+            option = wumpus_str(x,y) + " >> ("
+            notWumps = []
+            for xtemp in range(xmin, xmax+1):
+                for ytemp in range(ymin, ymax+1):
+                    if xtemp != x and ytemp != y:
+                        notWumps.append('~' + wumpus_str(xtemp,ytemp))
+            option += ' & '.join(notWumps)
+            option += ')'
+            options.append(option)
+    axiom_str += ' & '.join(options)
     return axiom_str
 
 def axiom_generator_only_in_one_location(xi, yi, xmin, xmax, ymin, ymax, t = 0):
@@ -275,8 +304,17 @@ def axiom_generator_only_in_one_location(xi, yi, xmin, xmax, ymin, ymax, t = 0):
     """
     axiom_str = ''
     "*** YOUR CODE HERE ***"
+    axiom_str += state_loc_str(xi, yi, t) + " >> ("
+    others = []
+    for x in range(xmin, xmax +1):
+        for y in range(ymin, ymax +1):
+            if y != yi and x != xi:
+                others.append('~' + state_loc_str(x, y, t))
+
+    axiom_str += ' & '.join(others)
+    axiom_str += ')'
     # Comment or delete the next line once this function has been implemented.
-    utils.print_not_implemented()
+    # utils.print_not_implemented()
     return axiom_str
 
 def axiom_generator_only_one_heading(heading = 'north', t = 0):
@@ -289,8 +327,19 @@ def axiom_generator_only_one_heading(heading = 'north', t = 0):
     """
     axiom_str = ''
     "*** YOUR CODE HERE ***"
+    headingList = ['North', 'South', 'East', 'West']
+    notHeading = []
+    for h in headingList:
+        if h.upper() == heading.upper()
+            axiom_str += 'Heading' + h + str(t)
+        else
+            notHeading.append('Heading' + h + str(t))
+    axiom_str += ' >> ('
+    axiom_str += ' & '.join(notHeading)
+    axiom_str += ')'
+
     # Comment or delete the next line once this function has been implemented.
-    utils.print_not_implemented()
+    # utils.print_not_implemented()
     return axiom_str
 
 def axiom_generator_have_arrow_and_wumpus_alive(t = 0):
@@ -301,8 +350,9 @@ def axiom_generator_have_arrow_and_wumpus_alive(t = 0):
     """
     axiom_str = ''
     "*** YOUR CODE HERE ***"
+    axiom_str += state_have_arrow(t) + ' & ' + state_wumpus_alive(t)
     # Comment or delete the next line once this function has been implemented.
-    utils.print_not_implemented()
+    # utils.print_not_implemented()
     return axiom_str
 
 
