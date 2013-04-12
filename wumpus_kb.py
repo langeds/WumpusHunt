@@ -422,6 +422,9 @@ def axiom_generator_breeze_percept_and_location_property(x, y, t):
     """
     axiom_str = ''
     "*** YOUR CODE HERE ***"
+
+    axiom_str += percept_breeze_str(t) + " >> " + breeze_str(x,y)
+
     return axiom_str
 
 def generate_breeze_percept_and_location_axioms(t, xmin, xmax, ymin, ymax):
@@ -443,6 +446,7 @@ def axiom_generator_stench_percept_and_location_property(x, y, t):
     """
     axiom_str = ''
     "*** YOUR CODE HERE ***"
+    axiom_str += percept_stench_str(t) + " >> " + stench_str(x,y)
     return axiom_str
 
 def generate_stench_percept_and_location_axioms(t, xmin, xmax, ymin, ymax):
