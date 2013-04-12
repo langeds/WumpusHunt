@@ -392,7 +392,11 @@ def axiom_generator_location_OK(x, y, t):
     t := time
     """
     axiom_str = ''
+    "Not pitt (x,y) and (not Wumpus(x,y) or Dead Wumpus(x,y))"
     "*** YOUR CODE HERE ***"
+    axiom_str += '~' + pitt_str(x,y) + ' & ('
+    axiom_str += '~' + wumpus_str(x,y) + " | "
+    axiom_str += wumpus_str(x,y) + ' & ~' + state_wumpus_alive(t) + ')'
     return axiom_str
 
 def generate_square_OK_axioms(t, xmin, xmax, ymin, ymax):
